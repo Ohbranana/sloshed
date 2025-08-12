@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocktail Recipe Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>SLOSHED</h1>
+        </header>
+
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search by name or liquor base..." class="search-input">
+                <button id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="filter-container">
+                <select id="liquorFilter" class="filter-select">
+                    <option value="">All Liquor Bases</option>
+                    <option value="Vodka">Vodka</option>
+                    <option value="Gin">Gin</option>
+                    <option value="Rum">Rum</option>
+                    <option value="Whiskey">Whiskey</option>
+                    <option value="Tequila">Tequila</option>
+                    <option value="Brandy">Brandy</option>
+                    <option value="Liqueur">Liqueur</option>
+                    <option value="Wine">Wine</option>
+                    <option value="Beer">Beer</option>
+                    <option value="Non-Alcoholic">Non-Alcoholic</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <div class="form-links">
+                    <a href="https://1drv.ms/x/c/8e1496f5467165d5/ESHk6jQ7ejBArYLT4wtkP5kB0kLWtMdIzqGeG1E5IRyu6A?e=C1bg1s" target="_blank" class="form-link">
+                        <i class="fas fa-file-excel"></i> Liquor Cabinet
+                    </a>
+                    <a href="https://claude.ai/login?returnTo=%2F%3F" target="_blank" class="form-link">
+                        <i class="fas fa-robot"></i> Claude AI
+                    </a>
+                </div>
+                <h2>Add New Recipe</h2>
+                <form id="recipeForm" class="recipe-form">
+                    <div class="form-group">
+                        <label for="recipeName">Cocktail Name *</label>
+                        <input type="text" id="recipeName" name="name" required class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="liquorBase">Primary Liquor Base *</label>
+                        <select id="liquorBase" name="liquorBase" required class="form-select">
+                            <option value="">Select a liquor base</option>
+                            <option value="Vodka">Vodka</option>
+                            <option value="Gin">Gin</option>
+                            <option value="Rum">Rum</option>
+                            <option value="Whiskey">Whiskey</option>
+                            <option value="Tequila">Tequila</option>
+                            <option value="Brandy">Brandy</option>
+                            <option value="Liqueur">Liqueur</option>
+                            <option value="Wine">Wine</option>
+                            <option value="Beer">Beer</option>
+                            <option value="Non-Alcoholic">Non-Alcoholic</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ingredients">Ingredients & Instructions *</label>
+                        <textarea id="ingredients" name="ingredients" rows="8" required class="form-textarea" 
+                                placeholder="List all ingredients and step-by-step instructions..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipeImage">Cocktail Image</label>
+                        <input type="file" id="recipeImage" name="image" accept="image/*" class="form-file">
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-plus"></i> Add Recipe
+                    </button>
+                </form>
+            </div>
+
+            <div class="recipes-section">
+                <h2>Recipe Collection</h2>
+                <div id="recipesContainer" class="recipes-grid">
+                    <!-- Recipes will be dynamically added here -->
+                </div>
+                <div id="noRecipes" class="no-recipes">
+                    <i class="fas fa-glass-martini-alt"></i>
+                    <p>No recipes yet. Add your first cocktail recipe above!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
