@@ -432,3 +432,18 @@ function clearFormDraft() {
     localStorage.removeItem('cocktailFormDraft');
     formData = {};
 } 
+
+// Copy Liquor Cabinet link to clipboard
+document.addEventListener('DOMContentLoaded', () => {
+    const liquorCabinetBtn = document.getElementById('liquorCabinetBtn');
+    if (liquorCabinetBtn) {
+        liquorCabinetBtn.addEventListener('click', () => {
+            const link = "https://docs.google.com/spreadsheets/d/1PR8BDSisX7xN1eshhJsVvULSXvW0oEsQc3HNT3AxRDs/edit?usp=sharing";
+            navigator.clipboard.writeText(link).then(() => {
+                showNotification("Liquor Cabinet link copied to clipboard!", "success");
+            }).catch(() => {
+                showNotification("Failed to copy link. Please try again.", "error");
+            });
+        });
+    }
+});
