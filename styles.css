@@ -222,6 +222,58 @@ body {
     min-height: 120px;
 }
 
+.form-help {
+    color: #666666;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Tags Autocomplete */
+.tags-input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.tag-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #111111;
+    border: 2px solid #333333;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.tag-suggestion {
+    padding: 10px 16px;
+    cursor: pointer;
+    color: #ffffff;
+    border-bottom: 1px solid #333333;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+}
+
+.tag-suggestion:hover {
+    background: #f6a73a;
+    color: #000000;
+}
+
+.tag-suggestion:last-child {
+    border-bottom: none;
+}
+
+.tag-suggestion.highlighted {
+    background: #f6a73a;
+    color: #000000;
+}
+
 .form-file {
     padding: 8px;
     border: 2px dashed #333333;
@@ -334,6 +386,22 @@ body {
     margin-bottom: 12px;
 }
 
+.recipe-tags {
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.recipe-tag {
+    background: #333333;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
 .recipe-ingredients {
     color: #cccccc;
     font-size: 0.9rem;
@@ -400,7 +468,7 @@ body {
 
 .modal-recipe-image {
     width: 100%;
-    max-height: 300px;
+    aspect-ratio: 4/3;
     object-fit: cover;
     border-radius: 0;
     margin-bottom: 20px;
@@ -425,6 +493,22 @@ body {
     margin-bottom: 20px;
 }
 
+.modal-recipe-tags {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.modal-recipe-tag {
+    background: #333333;
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
 .modal-recipe-ingredients {
     color: #cccccc;
     line-height: 1.8;
@@ -436,7 +520,8 @@ body {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
 }
 
 .modal-btn {
@@ -450,6 +535,8 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
+    min-width: fit-content;
 }
 
 .edit-btn {
@@ -472,6 +559,15 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .modal-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .modal-btn {
+        flex: 1;
+        min-width: auto;
+    }
     .container {
         padding: 15px;
     }
