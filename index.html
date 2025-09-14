@@ -40,15 +40,21 @@
 
         <div class="main-content">
             <div class="form-section">
+                <div class="form-header">
+                    <h2>Add New Recipe</h2>
+                    <button id="formToggleBtn" type="button" class="form-toggle-btn">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
                 <div class="form-links">
                     <button id="liquorCabinetBtn" type="button" class="form-link">
-    <i class="fas fa-file-csv"></i> Liquor Cabinet
-</button>
+                        <i class="fas fa-file-csv"></i> Liquor Cabinet
+                    </button>
                     <a href="https://chatgpt.com/" target="_blank" class="form-link">
                         <i class="fas fa-robot"></i>ChatGPT
                     </a>
                 </div>
-                <h2>Add New Recipe</h2>
+                <div class="form-content" id="formContent">
                 <form id="recipeForm" class="recipe-form">
                     <div class="form-group">
                         <label for="recipeName">Cocktail Name *</label>
@@ -98,6 +104,7 @@
                         <i class="fas fa-plus"></i> Add Recipe
                     </button>
                 </form>
+                </div>
             </div>
 
             <div class="recipes-section">
@@ -113,6 +120,13 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <button id="exportBtn" type="button" class="export-btn">
+            <i class="fas fa-download"></i> Export All Recipes
+        </button>
+    </footer>
+
     <!-- Recipe Modal -->
     <div id="recipeModal" class="modal">
         <div class="modal-content">
@@ -121,6 +135,7 @@
         </div>
     </div>
 
+    <script src="recipes.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 

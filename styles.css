@@ -137,15 +137,72 @@ body {
 /* Form Section */
 .form-section {
     background: #111111;
-    padding: 30px;
+    padding: 0;
     border-radius: 0;
     border: 2px solid #333333;
+    overflow: hidden;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: #111111;
+    border-bottom: 1px solid #333333;
+}
+
+.form-header h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.5rem;
+}
+
+.form-toggle-btn {
+    background: transparent;
+    color: #f6a73a;
+    border: 1px solid #f6a73a;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.form-toggle-btn:hover {
+    background: #f6a73a;
+    color: #000000;
+}
+
+.form-toggle-btn i {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.form-toggle-btn.collapsed i {
+    transform: rotate(180deg);
+}
+
+.form-content {
+    padding: 30px;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+}
+
+.form-content.collapsed {
+    max-height: 0;
+    padding: 0 30px;
+    opacity: 0;
 }
 
 .form-links {
     display: flex;
     gap: 15px;
-    margin-bottom: 20px;
+    margin: 20px 30px;
     flex-wrap: wrap;
 }
 
@@ -562,11 +619,20 @@ body {
     .modal-actions {
         justify-content: center;
         flex-wrap: wrap;
+        margin-top: 30px;
+        margin-bottom: 20px;
     }
     
     .modal-btn {
         flex: 1;
         min-width: auto;
+        margin: 5px;
+    }
+    
+    .close {
+        right: 15px;
+        top: 10px;
+        font-size: 24px;
     }
     .container {
         padding: 15px;
@@ -598,6 +664,7 @@ body {
         margin: 10% auto;
         width: 95%;
         padding: 20px;
+        padding-top: 50px;
     }
 }
 
@@ -633,4 +700,39 @@ body {
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
+}
+
+/* Footer */
+.footer {
+    background: transparent;
+    border-top: 1px solid #222222;
+    padding: 15px 20px;
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.8;
+}
+
+.export-btn {
+    background: transparent;
+    color: #666666;
+    border: 1px solid #333333;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.export-btn:hover {
+    background: #333333;
+    color: #f6a73a;
+    border-color: #f6a73a;
+}
+
+.export-btn i {
+    font-size: 14px;
 } 

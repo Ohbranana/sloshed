@@ -16,6 +16,9 @@ const modalContent = document.getElementById('modalContent');
 const closeModal = document.querySelector('.close');
 const recipeTags = document.getElementById('recipeTags');
 const tagSuggestions = document.getElementById('tagSuggestions');
+const exportBtn = document.getElementById('exportBtn');
+const formToggleBtn = document.getElementById('formToggleBtn');
+const formContent = document.getElementById('formContent');
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -42,6 +45,12 @@ function setupEventListeners() {
     recipeTags.addEventListener('input', handleTagInput);
     recipeTags.addEventListener('keydown', handleTagKeydown);
     recipeTags.addEventListener('blur', hideTagSuggestions);
+    
+    // Export functionality
+    exportBtn.addEventListener('click', exportRecipesToTxt);
+    
+    // Form toggle functionality
+    formToggleBtn.addEventListener('click', toggleForm);
     
     // Modal functionality
     closeModal.addEventListener('click', closeModalHandler);
@@ -305,6 +314,19 @@ function deleteRecipe(recipeId) {
 function resetForm() {
     recipeForm.reset();
     imagePreview.innerHTML = '';
+    
+    // Ensure all fields are completely cleared
+    document.getElementById('recipeName').value = '';
+    document.getElementById('liquorBase').value = '';
+    document.getElementById('recipeTags').value = '';
+    document.getElementById('ingredients').value = '';
+    document.getElementById('recipeImage').value = '';
+    
+    // Clear any tag suggestions
+    hideTagSuggestions();
+    
+    // Reset form draft data
+    clearFormDraft();
 }
 
 // Show notification
@@ -345,75 +367,8 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Add some sample recipes if no recipes exist
+// Add sample recipes if no recipes exist
 if (recipes.length === 0) {
-    const sampleRecipes = [
-        {
-            id: 1,
-            name: "Classic Margarita",
-            liquorBase: "Tequila",
-            tags: ["summer", "refreshing", "citrus", "classic"],
-            ingredients: `Ingredients:
-• 2 oz Tequila blanco
-• 1 oz Fresh lime juice
-• 1 oz Triple sec or Cointreau
-• 1/2 oz Simple syrup (optional)
-
-Instructions:
-1. Rim a chilled glass with salt
-2. Combine all ingredients in a shaker with ice
-3. Shake vigorously for 15-20 seconds
-4. Strain into the prepared glass
-5. Garnish with a lime wheel
-
-Perfect for: Summer parties, Mexican cuisine, or anytime you want a refreshing citrus cocktail!`,
-            image: null,
-            createdAt: new Date().toISOString()
-        },
-        {
-            id: 2,
-            name: "Negroni",
-            liquorBase: "Gin",
-            tags: ["bitter", "sophisticated", "aperitif", "italian"],
-            ingredients: `Ingredients:
-• 1 oz Gin
-• 1 oz Sweet vermouth
-• 1 oz Campari
-
-Instructions:
-1. Fill a rocks glass with ice
-2. Add all ingredients in equal parts
-3. Stir gently for 30 seconds
-4. Garnish with an orange peel
-
-A sophisticated Italian classic that's perfect as an aperitif. The bitter Campari balances beautifully with the herbal gin and sweet vermouth.`,
-            image: null,
-            createdAt: new Date().toISOString()
-        },
-        {
-            id: 3,
-            name: "Old Fashioned",
-            liquorBase: "Whiskey",
-            tags: ["classic", "strong", "whiskey", "timeless"],
-            ingredients: `Ingredients:
-• 2 oz Bourbon or rye whiskey
-• 1/4 oz Simple syrup
-• 2-3 dashes Angostura bitters
-• Orange peel for garnish
-
-Instructions:
-1. In a rocks glass, muddle the bitters with simple syrup
-2. Add ice cubes
-3. Pour in the whiskey
-4. Stir gently for 30 seconds
-5. Garnish with an orange peel
-
-A timeless classic that showcases the whiskey's character. Perfect for sipping slowly and enjoying the complex flavors.`,
-            image: null,
-            createdAt: new Date().toISOString()
-        }
-    ];
-    
     recipes = sampleRecipes;
     filteredRecipes = [...recipes];
     saveRecipes();
@@ -577,6 +532,57 @@ function handleTagKeydown(e) {
         hideTagSuggestions();
     }
 } 
+
+// Toggle form visibility
+function toggleForm() {
+    formContent.classList.toggle('collapsed');
+    formToggleBtn.classList.toggle('collapsed');
+}
+
+// Export recipes to TXT file
+function exportRecipesToTxt() {
+    if (recipes.length === 0) {
+        showNotification("No recipes to export!", "error");
+        return;
+    }
+    
+    try {
+        const txtContent = formatRecipesForTxt(recipes);
+        const blob = new Blob([txtContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `cocktail-recipes-${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showNotification(`Exported ${recipes.length} recipes successfully!`, "success");
+    } catch (error) {
+        console.error('Error exporting recipes:', error);
+        showNotification("Error exporting recipes. Please try again.", "error");
+    }
+}
+
+// Format recipes for text export
+function formatRecipesForTxt(recipesToExport) {
+    const recipesText = recipesToExport.map((recipe, index) => {
+        const recipeText = `{
+    id: ${recipe.id},
+    name: "${recipe.name}",
+    liquorBase: "${recipe.liquorBase}",
+    tags: [${recipe.tags && recipe.tags.length > 0 ? recipe.tags.map(tag => `"${tag}"`).join(', ') : ''}],
+    ingredients: \`${recipe.ingredients}\`,
+    image: null,
+    createdAt: new Date().toISOString()
+}`;
+        return recipeText;
+    }).join(',\n\n');
+    
+    return `[\n${recipesText}\n]`;
+}
 
 // Copy Liquor Cabinet link to clipboard
 document.addEventListener('DOMContentLoaded', () => {
