@@ -14,6 +14,8 @@ const imagePreview = document.getElementById('imagePreview');
 const modal = document.getElementById('recipeModal');
 const modalContent = document.getElementById('modalContent');
 const closeModal = document.querySelector('.close');
+const recipeTags = document.getElementById('recipeTags');
+const tagSuggestions = document.getElementById('tagSuggestions');
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -36,6 +38,11 @@ function setupEventListeners() {
     // Image preview
     recipeImage.addEventListener('change', handleImagePreview);
     
+    // Tag autocomplete
+    recipeTags.addEventListener('input', handleTagInput);
+    recipeTags.addEventListener('keydown', handleTagKeydown);
+    recipeTags.addEventListener('blur', hideTagSuggestions);
+    
     // Modal functionality
     closeModal.addEventListener('click', closeModalHandler);
     window.addEventListener('click', function(event) {
@@ -54,6 +61,7 @@ function handleFormSubmit(e) {
         id: Date.now(),
         name: formData.get('name').trim(),
         liquorBase: formData.get('liquorBase'),
+        tags: formData.get('tags').trim().split(',').map(tag => tag.trim()).filter(tag => tag.length > 0),
         ingredients: formData.get('ingredients').trim(),
         image: null,
         createdAt: new Date().toISOString()
@@ -110,6 +118,11 @@ function displayRecipes() {
             <div class="recipe-content">
                 <h3 class="recipe-name">${recipe.name}</h3>
                 <span class="recipe-liquor">${recipe.liquorBase}</span>
+                ${recipe.tags && recipe.tags.length > 0 ? `
+                    <div class="recipe-tags">
+                        ${recipe.tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}
+                    </div>
+                ` : ''}
                 <p class="recipe-ingredients">${recipe.ingredients}</p>
             </div>
         </div>
@@ -124,7 +137,8 @@ function handleSearch() {
     filteredRecipes = recipes.filter(recipe => {
         const matchesSearch = recipe.name.toLowerCase().includes(searchTerm) ||
                             recipe.liquorBase.toLowerCase().includes(searchTerm) ||
-                            recipe.ingredients.toLowerCase().includes(searchTerm);
+                            recipe.ingredients.toLowerCase().includes(searchTerm) ||
+                            (recipe.tags && recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
         
         const matchesFilter = !liquorFilterValue || recipe.liquorBase === liquorFilterValue;
         
@@ -175,6 +189,11 @@ function openRecipeModal(recipeId) {
         }
         <h2 class="modal-recipe-name">${recipe.name}</h2>
         <span class="modal-recipe-liquor">${recipe.liquorBase}</span>
+        ${recipe.tags && recipe.tags.length > 0 ? `
+            <div class="modal-recipe-tags">
+                ${recipe.tags.map(tag => `<span class="modal-recipe-tag">${tag}</span>`).join('')}
+            </div>
+        ` : ''}
         <div class="modal-recipe-ingredients">${recipe.ingredients}</div>
         <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #333333; color: #666666; font-size: 0.9rem;">
             Added on ${new Date(recipe.createdAt).toLocaleDateString()}
@@ -199,6 +218,7 @@ function editRecipe(recipeId) {
     // Populate form with recipe data
     document.getElementById('recipeName').value = recipe.name;
     document.getElementById('liquorBase').value = recipe.liquorBase;
+    document.getElementById('recipeTags').value = recipe.tags ? recipe.tags.join(', ') : '';
     document.getElementById('ingredients').value = recipe.ingredients;
     
     // Show image preview if exists
@@ -231,6 +251,7 @@ function updateRecipe(recipeId) {
         ...recipes[recipeIndex],
         name: formData.get('name').trim(),
         liquorBase: formData.get('liquorBase'),
+        tags: formData.get('tags').trim().split(',').map(tag => tag.trim()).filter(tag => tag.length > 0),
         ingredients: formData.get('ingredients').trim(),
         updatedAt: new Date().toISOString()
     };
@@ -331,6 +352,7 @@ if (recipes.length === 0) {
             id: 1,
             name: "Classic Margarita",
             liquorBase: "Tequila",
+            tags: ["summer", "refreshing", "citrus", "classic"],
             ingredients: `Ingredients:
 • 2 oz Tequila blanco
 • 1 oz Fresh lime juice
@@ -352,6 +374,7 @@ Perfect for: Summer parties, Mexican cuisine, or anytime you want a refreshing c
             id: 2,
             name: "Negroni",
             liquorBase: "Gin",
+            tags: ["bitter", "sophisticated", "aperitif", "italian"],
             ingredients: `Ingredients:
 • 1 oz Gin
 • 1 oz Sweet vermouth
@@ -371,6 +394,7 @@ A sophisticated Italian classic that's perfect as an aperitif. The bitter Campar
             id: 3,
             name: "Old Fashioned",
             liquorBase: "Whiskey",
+            tags: ["classic", "strong", "whiskey", "timeless"],
             ingredients: `Ingredients:
 • 2 oz Bourbon or rye whiskey
 • 1/4 oz Simple syrup
@@ -431,6 +455,127 @@ Object.keys(savedFormData).forEach(key => {
 function clearFormDraft() {
     localStorage.removeItem('cocktailFormDraft');
     formData = {};
+}
+
+// Get all existing tags from recipes
+function getAllExistingTags() {
+    const allTags = new Set();
+    recipes.forEach(recipe => {
+        if (recipe.tags && recipe.tags.length > 0) {
+            recipe.tags.forEach(tag => allTags.add(tag.toLowerCase()));
+        }
+    });
+    return Array.from(allTags).sort();
+}
+
+// Handle tag input for autocomplete
+function handleTagInput(e) {
+    const input = e.target.value;
+    const cursorPosition = e.target.selectionStart;
+    
+    // Get the current tag being typed (the last one after the last comma)
+    const lastCommaIndex = input.lastIndexOf(',');
+    const currentTag = lastCommaIndex === -1 ? input.trim() : input.substring(lastCommaIndex + 1).trim();
+    
+    if (currentTag.length > 0) {
+        const existingTags = getAllExistingTags();
+        const matchingTags = existingTags.filter(tag => 
+            tag.toLowerCase().includes(currentTag.toLowerCase()) && 
+            tag.toLowerCase() !== currentTag.toLowerCase()
+        );
+        
+        if (matchingTags.length > 0) {
+            showTagSuggestions(matchingTags, currentTag);
+        } else {
+            hideTagSuggestions();
+        }
+    } else {
+        hideTagSuggestions();
+    }
+}
+
+// Show tag suggestions dropdown
+function showTagSuggestions(tags, currentTag) {
+    tagSuggestions.innerHTML = '';
+    
+    tags.forEach((tag, index) => {
+        const suggestion = document.createElement('div');
+        suggestion.className = 'tag-suggestion';
+        suggestion.textContent = tag;
+        suggestion.dataset.tag = tag;
+        
+        suggestion.addEventListener('click', () => selectTagSuggestion(tag));
+        
+        tagSuggestions.appendChild(suggestion);
+    });
+    
+    tagSuggestions.style.display = 'block';
+}
+
+// Hide tag suggestions dropdown
+function hideTagSuggestions() {
+    setTimeout(() => {
+        tagSuggestions.style.display = 'none';
+    }, 150); // Small delay to allow clicks on suggestions
+}
+
+// Select a tag suggestion
+function selectTagSuggestion(selectedTag) {
+    const input = recipeTags.value;
+    const cursorPosition = recipeTags.selectionStart;
+    const lastCommaIndex = input.lastIndexOf(',');
+    
+    let newValue;
+    if (lastCommaIndex === -1) {
+        newValue = selectedTag;
+    } else {
+        newValue = input.substring(0, lastCommaIndex + 1) + ' ' + selectedTag;
+    }
+    
+    recipeTags.value = newValue;
+    hideTagSuggestions();
+    recipeTags.focus();
+}
+
+// Handle keyboard navigation in tag suggestions
+function handleTagKeydown(e) {
+    const suggestions = tagSuggestions.querySelectorAll('.tag-suggestion');
+    const highlighted = tagSuggestions.querySelector('.tag-suggestion.highlighted');
+    
+    if (suggestions.length === 0) return;
+    
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (highlighted) {
+            highlighted.classList.remove('highlighted');
+            const next = highlighted.nextElementSibling;
+            if (next) {
+                next.classList.add('highlighted');
+            } else {
+                suggestions[0].classList.add('highlighted');
+            }
+        } else {
+            suggestions[0].classList.add('highlighted');
+        }
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (highlighted) {
+            highlighted.classList.remove('highlighted');
+            const prev = highlighted.previousElementSibling;
+            if (prev) {
+                prev.classList.add('highlighted');
+            } else {
+                suggestions[suggestions.length - 1].classList.add('highlighted');
+            }
+        } else {
+            suggestions[suggestions.length - 1].classList.add('highlighted');
+        }
+    } else if (e.key === 'Enter' && highlighted) {
+        e.preventDefault();
+        selectTagSuggestion(highlighted.dataset.tag);
+    } else if (e.key === 'Escape') {
+        hideTagSuggestions();
+    }
 } 
 
 // Copy Liquor Cabinet link to clipboard
