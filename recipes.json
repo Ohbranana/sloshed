@@ -1,0 +1,18 @@
+{
+  "recipes": [
+    {
+      "name": "Margarita",
+      "ingredients": [
+        "2 oz Tequila",
+        "1 oz Lime juice",
+        "1 oz Cointreau"
+      ],
+      "steps": [
+        "Add all ingredients to a shaker with ice.",
+        "Shake well.",
+        "Strain into a glass with fresh ice."
+      ],
+      "tags": ["classic", "tequila", "citrus"]
+    }
+  ]
+}
