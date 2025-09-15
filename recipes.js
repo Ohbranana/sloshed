@@ -63,7 +63,74 @@ Instructions:
 A timeless classic that showcases the whiskey's character. Perfect for sipping slowly and enjoying the complex flavors.`,
         image: null,
         createdAt: new Date().toISOString()
-    }
+    },
+    {
+    id: 4,
+    name: "Spiced Rye Plum",
+    liquorBase: "Whiskey",
+    tags: ["strong", "rye", "plum", "bitters"],
+    ingredients: `Ingredients:
+• 1.5 oz Medallion Rye Whiskey
+• 0.5 oz Suntory Plum Liqueur
+• 0.5 oz Sweet Vermouth (optional, or extra plum liqueur)
+• 2 dashes Angostura bitters
+• Orange twist or cherry garnish
+
+Instructions:
+1. Add whiskey, plum liqueur, vermouth, and bitters to a mixing glass with ice.
+2. Stir until chilled.
+3. Strain into a chilled coupe or rocks glass.
+4. Garnish with an orange twist or cherry.
+
+A smooth, spirit-forward cocktail with the sweetness of plum balanced by rye spice.`,
+    image: null,
+    createdAt: new Date().toISOString()
+},
+{
+    id: 5,
+    name: "Lychee and Elderflower Cooler",
+    liquorBase: "Vodka",
+    tags: ["fruity", "refreshing", "light", "vodka"],
+    ingredients: `Ingredients:
+• 1.5 oz Vodka (Totem or Smirnoff)
+• 0.5 oz Soho Lychee Liqueur
+• 0.5 oz St. Germain Elderflower Liqueur
+• Soda water to top
+• Mint sprig or lychee fruit for garnish
+
+Instructions:
+1. Fill a tall glass with ice.
+2. Add vodka, lychee liqueur, and elderflower liqueur.
+3. Stir gently.
+4. Top with soda water.
+5. Garnish with mint or lychee fruit.
+
+A delicate, floral highball with subtle fruit sweetness — perfect for summer.`,
+    image: null,
+    createdAt: new Date().toISOString()
+},
+{
+    id: 6,
+    name: "Melon Sunshine",
+    liquorBase: "Gin",
+    tags: ["fruity", "citrus", "refreshing", "melon"],
+    ingredients: `Ingredients:
+• 1.5 oz Midori Melon Liqueur
+• 1 oz Gordon's Sunset Orange Gin Spirit
+• 0.5 oz Simple syrup (optional)
+• 1.5–2 oz Fresh orange juice
+• Orange slice or lime wheel for garnish
+
+Instructions:
+1. Add Midori, gin spirit, syrup, and orange juice to a shaker with ice.
+2. Shake well until chilled.
+3. Strain into a highball glass over fresh ice.
+4. Garnish with an orange slice or lime wheel.
+
+Bright, juicy, and refreshing — a citrus-melon burst in every sip.`,
+    image: null,
+    createdAt: new Date().toISOString()
+}
 ];
 
 // Export for use in other files
