@@ -130,6 +130,29 @@ Instructions:
 Bright, juicy, and refreshing — a citrus-melon burst in every sip.`,
     image: null,
     createdAt: new Date().toISOString()
+},
+    {
+    id: 7,
+    name: "Cherry Pie Sour",
+    liquorBase: "Whiskey",
+    tags: ["sour", "cherry", "frothy", "dessert", "whiskey"],
+    ingredients: `Ingredients:
+• 2 oz Rye or Bourbon whiskey (rye spicier, bourbon sweeter)
+• 0.75 oz Cherry liqueur (or muddled maraschino + grenadine)
+• 0.75 oz Fresh lemon juice
+• 0.5 oz Cinnamon or spiced syrup (or simple syrup + pinch cinnamon)
+• 1 Egg white
+• Optional: dash of vanilla extract
+
+Instructions:
+1. Dry shake whiskey, cherry liqueur, lemon juice, syrup, egg white, and vanilla for 10–15 seconds.
+2. Add ice, shake again until chilled.
+3. Strain into a coupe glass.
+4. Garnish with grated cinnamon, nutmeg, or a skewered cherry.
+
+A rich, foamy sour with cherry brightness, whiskey depth, warm spice, and creamy texture — like cherry pie in cocktail form.`,
+    image: null,
+    createdAt: new Date().toISOString()
 }
 ];
 
